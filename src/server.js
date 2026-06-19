@@ -1,4 +1,6 @@
 const http = require('http');
+const rotaAlunos = require('./rotas/alunos');
+const rotaProdutos = require('./rotas/produtos');
 
 const server = http.createServer((req, res) => {
 
@@ -24,74 +26,10 @@ const server = http.createServer((req, res) => {
 
             //aluno
         }else if(url.startsWith("/aluno") && method === 'GET'){
-            const id = url.split("/")[2];
-        
-            const alunos =
-               [{id:1, nome:"Ana", turma:"2 ano",curso:"DS"},
-                {id:2, nome:"Eva", turma:"2 ano",curso:"DS"},
-                {id:3, nome:"Julia", turma:"2 ano",curso:"DS"},
-                {id:4, nome:"Letícia", turma:"2 ano",curso:"DS"},
-                {id:5, nome:"Narcicia", turma:"2 ano",curso:"DS"}];
-
-                if (!id) {
-            console.log("Retornando lista completa");
-            res.writeHead(200, { "Content-Type": "application/json" });
-            res.end(JSON.stringify(alunos));
-                return;
-            }
-
-                for(let i = 0; i< alunos.length; i++){
-                    const valorid = Object.values(alunos[i])[0];
-
-                    if(id == valorid){
-                        
-                        console.log(JSON.stringify(alunos[i]));
-                        res.end(JSON.stringify(alunos[i]));
-                        return;
-                    }
-
-                } 
-                console.log("Erro: Aluno não encontrado");
-        res.writeHead(404, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ mensagem: "Aluno não encontrado" }));
-        
-
+           rotaAlunos(req, res);
         //produtos
     }else if(url.startsWith("/produtos") && method === 'GET'){
-        const Cat = url.split("/")[2];
-
-        const produtos = 
-            [{id:1, nome:"detergente", categoria:"limpeza", preço: 3.50},
-            {id:2, nome:"Sabão em pó", categoria:"limpeza", preço: 3.50},
-            {id:3, nome:"Pão de forma", categoria:"alimento", preço: 3.50},
-            {id:4, nome:"Bolo formigueiro", categoria:"alimento", preço: 3.50}];
-
-                      if (!Cat) {
-            console.log("Retornando lista completa(produtos)");
-            res.writeHead(200, { "Content-Type": "application/json" });
-            res.end(JSON.stringify(produtos));
-                return;
-            }
-
-            const Catfiltrada = [];
-                for(let i = 0; i< produtos.length; i++){
-                    const valorCat = produtos[i].categoria;
-
-                    if(valorCat == Cat){
-                        Catfiltrada.push(produtos[i]);
-                    }
-
-                } 
-                if (Catfiltrada.length > 0) {
-            console.log("Resultados calculados!");
-            res.writeHead(200, { "Content-Type": "application/json" });
-            res.end(JSON.stringify(Catfiltrada));
-                }else{
-
-                console.log("Erro: Categoria inválida");
-        res.writeHead(404, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ mensagem: "Categoria inválida" }));
-                }
+      rotaProdutos(req, res);
     }
       else {
         res.statusCode = 404;
